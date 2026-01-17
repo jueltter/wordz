@@ -19,4 +19,14 @@ public class WordTest {
         assertEquals(Letter.INCORRECT, result);
     }
 
+    @Test
+    public void oneCorrectLetter() {
+        var word = new Word("A");
+
+        var score = word.guess("A");
+
+        var result = score.letter(0);
+        assertEquals(Letter.CORRECT, result);
+    }
+
 }

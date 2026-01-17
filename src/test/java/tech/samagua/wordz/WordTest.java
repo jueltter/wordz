@@ -15,9 +15,7 @@ public class WordTest {
 
         var score = word.guess("Z");
 
-        var result = score.letter(0);
-
-        assertEquals(Letter.INCORRECT, result);
+        assertScoreForLetter(score, Letter.INCORRECT);
     }
 
     @Test
@@ -26,7 +24,7 @@ public class WordTest {
 
         var score = word.guess("A");
 
-        assertScoreForLetter(score, 0, Letter.CORRECT);
+        assertScoreForLetter(score, Letter.CORRECT);
     }
 
     @Test
@@ -35,13 +33,25 @@ public class WordTest {
 
         var score = word.guess("ZA");
 
-        assertScoreForLetter(score, 1, Letter.PART_CORRECT);
+        assertScoreForLetter(score, Letter.INCORRECT, Letter.PART_CORRECT);
 
     }
 
-    private void assertScoreForLetter(Score score, int position, Letter expected) {
+    @Test
+    void allScoreCombinations() {
+        var word = new Word("ARI");
 
-        assertEquals(expected, score.letter(position));
+        var score = word.guess("ZAI");
+
+        assertScoreForLetter(score, Letter.INCORRECT, Letter.PART_CORRECT, Letter.CORRECT);
+
+    }
+
+    private void assertScoreForLetter(Score score, Letter... expectedScores) {
+        for (int position = 0; position < expectedScores.length; position++) {
+            Letter expectedScore = expectedScores[position];
+            assertEquals(expectedScore, score.letter(position));
+        }
     }
 
 }

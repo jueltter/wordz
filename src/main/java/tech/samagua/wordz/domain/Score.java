@@ -1,8 +1,11 @@
 package tech.samagua.wordz.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Score {
     private final String correct;
-    private Letter result = Letter.INCORRECT;
+    private final List<Letter> results = new ArrayList<>();
     private int position;
 
     public Score(String correct) {
@@ -11,11 +14,7 @@ public class Score {
 
     public void assess(String attempt) {;
         for (char current: attempt.toCharArray()) {
-            if (isCorrectLetter(current)) {
-                result = Letter.CORRECT;
-            } else if (occursInWord(current)) {
-                result = Letter.PART_CORRECT;
-            }
+            results.add(scoreFor(current));
             position++;
         }
 
@@ -23,7 +22,7 @@ public class Score {
     }
 
     public Letter letter(int position) {
-        return result;
+        return results.get(position);
     }
 
     private boolean isCorrectLetter(char currentLetter) {
@@ -32,5 +31,17 @@ public class Score {
 
     private boolean occursInWord(char current) {
         return correct.contains(String.valueOf(current));
+    }
+
+    private Letter scoreFor(char current) {
+        if (isCorrectLetter(current)) {
+            return Letter.CORRECT;
+        }
+
+        if (occursInWord(current)) {
+            return Letter.PART_CORRECT;
+        }
+
+        return Letter.INCORRECT;
     }
 }

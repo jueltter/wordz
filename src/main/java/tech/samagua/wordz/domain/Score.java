@@ -9,18 +9,28 @@ public class Score {
         this.correct = correct;
     }
 
-    public void assess(int position, String attempt) {;
-        if (isCorrectLetter(attempt)) {
-            result = Letter.CORRECT;
-
+    public void assess(String attempt) {;
+        for (char current: attempt.toCharArray()) {
+            if (isCorrectLetter(current)) {
+                result = Letter.CORRECT;
+            } else if (occursInWord(current)) {
+                result = Letter.PART_CORRECT;
+            }
+            position++;
         }
+
+
     }
 
     public Letter letter(int position) {
         return result;
     }
 
-    private boolean isCorrectLetter(String attempt) {
-        return correct.charAt(position) == attempt.charAt(position);
+    private boolean isCorrectLetter(char currentLetter) {
+        return correct.charAt(position) == currentLetter;
+    }
+
+    private boolean occursInWord(char current) {
+        return correct.contains(String.valueOf(current));
     }
 }
